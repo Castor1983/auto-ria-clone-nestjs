@@ -2,8 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/req/create-user.dto';
 import { UpdateUserDto } from './dto/req/update-user.dto';
-import {ApiBearerAuth, ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiTags} from "@nestjs/swagger";
-import {PublicUserResDto} from "./dto/res/public-user.res.dto";
+import {ApiBearerAuth, ApiNoContentResponse, ApiTags} from "@nestjs/swagger";
 import {PrivateUserResDto} from "./dto/res/private-user.res.dto";
 
 @ApiTags('Users')
@@ -11,9 +10,8 @@ import {PrivateUserResDto} from "./dto/res/private-user.res.dto";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiCreatedResponse({type: PrivateUserResDto})
   @Post()
-  public async create(@Body() createUserDto: CreateUserDto):Promise<any> {
+  public async create(@Body() createUserDto: CreateUserDto):Promise<PrivateUserResDto> {
     return this.usersService.create(createUserDto);
   }
 
@@ -38,22 +36,21 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @ApiOkResponse({type: PrivateUserResDto })
   @Get('me')
-  public async findMe():Promise<any> {
+  public async findMe():Promise<PrivateUserResDto> {
       return this.usersService.findMe(1);
     }
   @ApiBearerAuth()
-    @ApiOkResponse({type: PrivateUserResDto })
+
     @Patch('me')
-  public async updateMe( @Body() updateUserDto: UpdateUserDto):Promise<any> {
+  public async updateMe( @Body() updateUserDto: UpdateUserDto):Promise<PrivateUserResDto> {
       return this.usersService.updateMe(1, updateUserDto);
     }
 
   @ApiBearerAuth()
     @ApiNoContentResponse({description: 'User has been removed'})
     @Delete('me')
-  public async removeMe():Promise<any> {
+  public async removeMe():Promise<void> {
       return this.usersService.removeMe(1);
     }
 }

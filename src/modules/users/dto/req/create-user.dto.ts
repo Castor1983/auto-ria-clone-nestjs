@@ -1,15 +1,27 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {IsEmail, IsNotIn, IsString, Length, Matches} from "class-validator";
+import {Transform} from "class-transformer";
+import {TransformHelper} from "../../../../common/transform.helper";
+
 
 export class CreateUserDto {
-    @ApiProperty()
+    @Transform(TransformHelper.trim)
+    @IsString()
+    @Length(2,20)
     public readonly name: string
 
-    @ApiProperty()
+    @IsEmail()
+    @Transform(TransformHelper.trim)
     public readonly email: string
 
-    @ApiProperty()
+    @IsString()
+    @Transform(TransformHelper.trim)
     public readonly phone: string
 
-    @ApiProperty()
+    @IsNotIn(['password', 'qwe', '123'])
+    @Transform(TransformHelper.trim)
+    @IsString()
+    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+        message: 'Incorrect password',
+    })
     public readonly password: string
 }
