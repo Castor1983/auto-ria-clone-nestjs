@@ -18,7 +18,7 @@ export class UsersService {
   }
 
   public async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    return `This action updates a #${(id, updateUserDto)} user`;
+    return `This action updates a #${id}, ${updateUserDto} user`;
   }
 
   public async remove(id: number): Promise<any> {
@@ -32,7 +32,7 @@ export class UsersService {
     id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<any> {
-    return `This action updates a #${(id, updateUserDto)} user`;
+    return `This action updates a #${id}, ${updateUserDto} user`;
   }
 
   public async removeMe(id: number): Promise<any> {
