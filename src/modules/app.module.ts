@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-import { UsersModule } from './users/users.module';
+import configuration from '../config/configuration';
 import { CarsModule } from './cars/cars.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [UsersModule, CarsModule],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }),
+    UsersModule,
+    CarsModule,
+  ],
   controllers: [],
   providers: [],
 })

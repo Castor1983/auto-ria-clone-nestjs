@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+
 import { CreateUserDto } from './dto/req/create-user.dto';
 import { UpdateUserDto } from './dto/req/update-user.dto';
 
 @Injectable()
 export class UsersService {
   public async create(createUserDto: CreateUserDto): Promise<any> {
-    return 'This action adds a new user';
+    return `This action adds a new user ${createUserDto}`;
   }
 
   public async findAll(): Promise<any> {
@@ -17,7 +18,7 @@ export class UsersService {
   }
 
   public async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${(id, updateUserDto)} user`;
   }
 
   public async remove(id: number): Promise<any> {
@@ -27,8 +28,11 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  public async updateMe(id: number, updateUserDto: UpdateUserDto): Promise<any> {
-    return `This action updates a #${id} user`;
+  public async updateMe(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<any> {
+    return `This action updates a #${(id, updateUserDto)} user`;
   }
 
   public async removeMe(id: number): Promise<any> {

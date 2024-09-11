@@ -1,6 +1,4 @@
-
 export class UpdateUserDto {
-    name?: string;
-    phone?: string;
-
+  name?: string;
+  phone?: string;
 }
