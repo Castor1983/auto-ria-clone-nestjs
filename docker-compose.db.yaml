@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-password}'
       POSTGRES_DB: '${POSTGRES_DB:-auto-ria-clone}'
     volumes:
-      - ./auto-ria-clone-api-db:/var/lib/postgresql/auto-ria-clone
+      - ./auto-ria-clone-api-db:/var/lib/postgresql/auto-ria
 
   auto-ria-clone-redis:
     image: redis:7.2.3
@@ -27,7 +27,7 @@ services:
       - "8000:9000"
       - "8001:9001"
     volumes:
-      - ./auto-ria-clone-api-s3-data:/usr/src/app/s3
+      - ./auto-ria-s3-data:/usr/src/app/s3
     environment:
       - MINIO_ROOT_USER=user            # AWS_S3_ACCESS_KEY
       - MINIO_ROOT_PASSWORD=password    # AWS_S3_SECRET_KEY
