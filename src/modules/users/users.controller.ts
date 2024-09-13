@@ -1,31 +1,18 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import { ApiBearerAuth, ApiNoContentResponse, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from './dto/req/create-user.dto';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { IUserData } from '../auth/interfaces/user-data.interface';
 import { UpdateUserDto } from './dto/req/update-user.dto';
 import { PrivateUserResDto } from './dto/res/private-user.res.dto';
+import { PublicUserResDto } from './dto/res/public-user.res.dto';
+import { UserMapper } from './user.mapper';
 import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  public async create(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<PrivateUserResDto> {
-    return await this.usersService.create(createUserDto);
-  }
-
   @Get()
   public async findAll(): Promise<any> {
     return await this.usersService.findAll();
@@ -51,8 +38,11 @@ export class UsersController {
 
   @ApiBearerAuth()
   @Get('me')
-  public async findMe(): Promise<PrivateUserResDto> {
-    return await this.usersService.findMe(1);
+  public async findMe(
+    @CurrentUser() userData: IUserData,
+  ): Promise<PublicUserResDto> {
+    const result = await this.usersService.findMe(userData);
+    return UserMapper.toResponseDTO(result);
   }
   @ApiBearerAuth()
   @Patch('me')

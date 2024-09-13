@@ -3,7 +3,7 @@ import { IsEmail, IsNotIn, IsString, Length, Matches } from 'class-validator';
 
 import { TransformHelper } from '../../../../common/transform.helper';
 
-export class CreateUserDto {
+export class BaseUserReqDto {
   @Transform(TransformHelper.trim)
   @IsString()
   @Length(2, 20)

@@ -1,16 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
+import { UserEntity } from '../../database/entities/user.entity';
+import { IUserData } from '../auth/interfaces/user-data.interface';
 import { UserRepository } from '../repository/services/user.repository';
-import { CreateUserDto } from './dto/req/create-user.dto';
 import { UpdateUserDto } from './dto/req/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
-  public async create(createUserDto: CreateUserDto): Promise<any> {
-    return await this.userRepository.save(createUserDto);
-  }
-
   public async findAll(): Promise<any> {
     return `This action returns all users`;
   }
@@ -26,8 +23,8 @@ export class UsersService {
   public async remove(id: number): Promise<any> {
     return `This action removes a #${id} user`;
   }
-  public async findMe(id: number): Promise<any> {
-    return `This action returns a #${id} user`;
+  public async findMe(userData: IUserData): Promise<UserEntity> {
+    return await this.userRepository.findOneBy({ id: userData.userId });
   }
 
   public async updateMe(
@@ -39,5 +36,11 @@ export class UsersService {
 
   public async removeMe(id: number): Promise<any> {
     return `This action removes a #${id} user`;
+  }
+  public async isEmailExistOrThrow(email: string): Promise<void> {
+    const user = await this.userRepository.findOneBy({ email });
+    if (user) {
+      throw new ConflictException('Email already exists');
+    }
   }
 }
