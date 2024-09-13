@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 
 import configuration from '../config/configuration';
 import { CarsModule } from './cars/cars.module';
+import { PostgresModule } from './postgres/postgres.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -11,10 +12,9 @@ import { UsersModule } from './users/users.module';
       load: [configuration],
       isGlobal: true,
     }),
+    PostgresModule,
     UsersModule,
     CarsModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
