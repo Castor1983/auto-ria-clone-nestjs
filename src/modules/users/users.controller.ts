@@ -1,7 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { ApiBearerAuth, ApiNoContentResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/interfaces/user-data.interface';
 import { UpdateUserDto } from './dto/req/update-user.dto';
 import { PrivateUserResDto } from './dto/res/private-user.res.dto';
@@ -17,12 +31,6 @@ export class UsersController {
   public async findAll(): Promise<any> {
     return await this.usersService.findAll();
   }
-
-  @Get(':userId')
-  public async findOne(@Param('userId') userId: string): Promise<any> {
-    return await this.usersService.findOne(+userId);
-  }
-
   @Patch(':userId')
   public async update(
     @Param('userId') userId: string,
@@ -37,13 +45,15 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Get('me')
   public async findMe(
     @CurrentUser() userData: IUserData,
-  ): Promise<PublicUserResDto> {
+  ): Promise<PrivateUserResDto> {
     const result = await this.usersService.findMe(userData);
     return UserMapper.toResponseDTO(result);
   }
+
   @ApiBearerAuth()
   @Patch('me')
   public async updateMe(
@@ -57,5 +67,12 @@ export class UsersController {
   @Delete('me')
   public async removeMe(): Promise<void> {
     return await this.usersService.removeMe(1);
+  }
+  @SkipAuth()
+  @Get(':userId')
+  public async findOne(
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ): Promise<PublicUserResDto> {
+    return await this.usersService.findOne(+userId);
   }
 }

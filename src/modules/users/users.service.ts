@@ -12,10 +12,6 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  public async findOne(id: number): Promise<any> {
-    return `This action returns a #${id} user`;
-  }
-
   public async update(id: number, updateUserDto: UpdateUserDto): Promise<any> {
     return `This action updates a #${id}, ${updateUserDto} user`;
   }
@@ -31,11 +27,14 @@ export class UsersService {
     id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<any> {
-    return `This action updates a #${id}, ${updateUserDto} user`;
+    return `This action updates a #${id}, #${updateUserDto} user`;
   }
 
   public async removeMe(id: number): Promise<any> {
     return `This action removes a #${id} user`;
+  }
+  public async findOne(id: number): Promise<any> {
+    return `This action returns a #${id} user`;
   }
   public async isEmailExistOrThrow(email: string): Promise<void> {
     const user = await this.userRepository.findOneBy({ email });
