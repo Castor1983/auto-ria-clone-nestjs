@@ -1,4 +1,6 @@
 import { UserEntity } from '../../database/entities/user.entity';
+import { IJwtPayload } from '../auth/interfaces/jwt-payload.interface';
+import { IUserData } from '../auth/interfaces/user-data.interface';
 import { BaseUserResDto } from './dto/res/base-user.res.dto';
 
 export class UserMapper {
@@ -6,7 +8,7 @@ export class UserMapper {
     return { ...data };
   }
 
-  public static toIUserData(user: UserEntity, payload: any): any {
+  public static toIUserData(user: UserEntity, payload: IJwtPayload): IUserData {
     return {
       userId: payload.userId,
       deviceId: payload.deviceId,

@@ -55,9 +55,10 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiNoContentResponse({ description: 'User has been removed' })
   @Delete('me')
-  public async removeMe(): Promise<void> {
-    return await this.usersService.removeMe(1);
+  public async removeMe(@CurrentUser() userData: IUserData): Promise<void> {
+    return await this.usersService.removeMe(userData);
   }
+
   @SkipAuth()
   @Get(':userId')
   public async findOne(
