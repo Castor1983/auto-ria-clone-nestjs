@@ -9,6 +9,7 @@ import { isUUID } from 'class-validator';
 import { CarEntity } from '../../../database/entities/car.entity';
 import { IUserData } from '../../auth/interfaces/user-data.interface';
 import { CarRepository } from '../../repository/services/car.repository';
+import { badWords } from '../BadWordsList';
 import { CreateCarReqDto } from '../dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from '../dto/req/update-car.req.dto';
 
@@ -82,5 +83,15 @@ export class CarsService {
     return await this.carRepository.count({
       where: { user_id: userId },
     });
+  }
+  public containsBadWords(content: string): boolean {
+    if (!content) return false;
+
+    for (const word of badWords) {
+      if (content.toLowerCase().includes(word.toLowerCase())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

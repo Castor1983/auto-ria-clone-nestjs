@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
@@ -18,6 +19,7 @@ export class CarLimitGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    Logger.log(request.body);
     const user: IUserData = request.user;
     if (user.accountType === 'premium') {
       return true;

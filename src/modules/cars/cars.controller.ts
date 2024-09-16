@@ -21,6 +21,7 @@ import { IUserData } from '../auth/interfaces/user-data.interface';
 import { CreateCarReqDto } from './dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from './dto/req/update-car.req.dto';
 import { CarResDto } from './dto/res/car.res.dto';
+import { BadWordsGuard } from './guards/badWords.guard';
 import { CarLimitGuard } from './guards/carLimit.guard';
 import { CarMapper } from './services/car.mapper';
 import { CarsService } from './services/cars.service';
@@ -29,9 +30,11 @@ import { CarsService } from './services/cars.service';
 @Controller('cars')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
+
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @UseGuards(CarLimitGuard)
+  @UseGuards(BadWordsGuard)
   @Post()
   public async create(
     @CurrentUser() userData: IUserData,
@@ -40,6 +43,8 @@ export class CarsController {
     const result = await this.carsService.create(userData, createCarReqDto);
     return CarMapper.toResponseDTO(result);
   }
+
+  @UseGuards(BadWordsGuard)
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
