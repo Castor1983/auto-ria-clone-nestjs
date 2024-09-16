@@ -1,4 +1,10 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { isUUID } from 'class-validator';
 
 import { CarEntity } from '../../../database/entities/car.entity';
 import { IUserData } from '../../auth/interfaces/user-data.interface';
@@ -29,13 +35,26 @@ export class CarsService {
     carId: string,
     updateCarReqDto: UpdateCarReqDto,
   ): Promise<CarEntity> {
+    if (!isUUID(carId)) {
+      throw new BadRequestException('Car id must be uuid type');
+    }
     const car = await this.carRepository.findOneBy({ id: carId });
+    if (!car) {
+      throw new NotFoundException('Car not found');
+    }
     this.carRepository.merge(car, updateCarReqDto);
     return await this.carRepository.save(car);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} car`;
+  public async removeMyCar(carId: string): Promise<void> {
+    if (!isUUID(carId)) {
+      throw new BadRequestException('Car id must be uuid type');
+    }
+    const car = await this.carRepository.findOneBy({ id: carId });
+    if (!car) {
+      throw new NotFoundException('Car not found');
+    }
+    await this.carRepository.delete({ id: carId });
   }
 
   /* findAll(query: CarsListReqDto) {

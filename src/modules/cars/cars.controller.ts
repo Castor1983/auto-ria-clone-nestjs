@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -54,9 +55,11 @@ export class CarsController {
     return CarMapper.toResponseDTO(updatedCar);
   }
 
-  @Delete(':id')
-  public async remove(@Param('id') id: string) {
-    return this.carsService.remove(+id);
+  @ApiBearerAuth()
+  @ApiNoContentResponse({ description: 'Car has been removed' })
+  @Delete(':carId')
+  public async removeMyCar(@Param('carId') carId: string): Promise<void> {
+    return await this.carsService.removeMyCar(carId);
   }
 
   /*@Get()
