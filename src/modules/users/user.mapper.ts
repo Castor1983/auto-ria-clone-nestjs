@@ -13,6 +13,8 @@ export class UserMapper {
       userId: payload.userId,
       deviceId: payload.deviceId,
       email: user.email,
+      role: user.role,
+      accountType: user.accountType,
     };
   }
 }

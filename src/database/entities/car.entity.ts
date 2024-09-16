@@ -20,10 +20,10 @@ export class CarEntity extends CreateUpdateModel {
   year: EYear;
 
   @Column('text')
-  specification: string;
+  description: string;
 
   @Column('text')
-  photo: string;
+  photo: string; // todo
 
   @Column({ type: 'enum', enum: EUkrainianRegion })
   region: EUkrainianRegion;
