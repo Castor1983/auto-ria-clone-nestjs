@@ -24,10 +24,12 @@ export class UsersService {
   }
 
   public async updateMe(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<any> {
-    return `This action updates a #${id}, #${updateUserDto} user`;
+    userData: IUserData,
+    dto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ id: userData.userId });
+    this.userRepository.merge(user, dto);
+    return await this.userRepository.save(user);
   }
 
   public async removeMe(id: number): Promise<any> {

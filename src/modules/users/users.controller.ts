@@ -31,18 +31,6 @@ export class UsersController {
   public async findAll(): Promise<any> {
     return await this.usersService.findAll();
   }
-  @Patch(':userId')
-  public async update(
-    @Param('userId') userId: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<any> {
-    return await this.usersService.update(+userId, updateUserDto);
-  }
-
-  @Delete(':userId')
-  public async remove(@Param('userId') userId: string) {
-    return await this.usersService.remove(+userId);
-  }
 
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -57,9 +45,11 @@ export class UsersController {
   @ApiBearerAuth()
   @Patch('me')
   public async updateMe(
-    @Body() updateUserDto: UpdateUserDto,
+    @CurrentUser() userData: IUserData,
+    @Body() dto: UpdateUserDto,
   ): Promise<PrivateUserResDto> {
-    return await this.usersService.updateMe(1, updateUserDto);
+    const result = await this.usersService.updateMe(userData, dto);
+    return UserMapper.toResponseDTO(result);
   }
 
   @ApiBearerAuth()
@@ -74,5 +64,17 @@ export class UsersController {
     @Param('userId', ParseUUIDPipe) userId: string,
   ): Promise<PublicUserResDto> {
     return await this.usersService.findOne(+userId);
+  }
+  @Patch(':userId')
+  public async update(
+    @Param('userId') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<any> {
+    return await this.usersService.update(+userId, updateUserDto);
+  }
+
+  @Delete(':userId')
+  public async remove(@Param('userId') userId: string) {
+    return await this.usersService.remove(+userId);
   }
 }
