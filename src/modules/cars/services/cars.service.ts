@@ -25,8 +25,13 @@ export class CarsService {
     }
   }
 
-  update(id: number, updateCarDto: UpdateCarReqDto) {
-    return `This action updates a #${id}  ${updateCarDto}car`;
+  public async updateMyCar(
+    carId: string,
+    updateCarReqDto: UpdateCarReqDto,
+  ): Promise<CarEntity> {
+    const car = await this.carRepository.findOneBy({ id: carId });
+    this.carRepository.merge(car, updateCarReqDto);
+    return await this.carRepository.save(car);
   }
 
   remove(id: number) {
