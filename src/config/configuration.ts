@@ -7,6 +7,11 @@ export default (): Config => ({
     port: Number(process.env.APP_PORT) || 3000,
     host: process.env.APP_HOST || 'localhost',
   },
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD,
+    phone: process.env.ADMIN_PHONE,
+  },
   postgres: {
     port: Number(process.env.POSTGRES_PORT),
     host: process.env.POSTGRES_HOST,
