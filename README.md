@@ -98,7 +98,9 @@ npm run migration: run
  npm run start:local
  ## Сервер запуститься на  http://localhost:3001,
  ## Swagger запуститься на  http://localhost:3001/docs,
+ ## При перщій компіляції та запуску сервера створиться Юзер з правами Адміністратора
  
+ ## Масив поганих слів знаходиться в папці src/modules/cars/BadwordsList.ts
 ```
 
 
