@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { ApiTags } from '@nestjs/swagger';
-import { Observable } from 'rxjs';
 
 import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { ExchangeCourseService } from './exchangeCourse.service';
@@ -11,7 +11,8 @@ export class ExchangeCourseController {
   constructor(private readonly exchangeCourseService: ExchangeCourseService) {}
   @SkipAuth()
   @Get('rates')
-  getCurrencyRates(): Observable<any> {
-    return this.exchangeCourseService.getCurrencyRates();
+  @Cron(CronExpression.EVERY_DAY_AT_7AM)
+  async getCurrencyRatesAndSave() {
+    await this.exchangeCourseService.getCurrencyRatesAndSave();
   }
 }
