@@ -22,64 +22,86 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Опис
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Проєкт на NestJS з підключенням до Postgres, Redis та AWS. Являє собою серверну частину платформи розміщення оголошень з продажу авто в Україні
 
-## Project setup
+## Вимоги
+Перед початком переконайтеся, що у вас встановлені наступні інструменти:
+```bash
+- [Node.js](https://nodejs.org/) (версія 16 або новіша)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
+- [Docker](https://www.docker.com/)
+- [AWS CLI](https://aws.amazon.com/cli/)
+```
+
+## Налаштування баз даних
+```bash
+### PostgreSQL
+
+1. Встановіть PostgreSQL на вашій машині або скористайтеся хмарним сервісом, наприклад, [Heroku Postgres](https://www.heroku.com/postgres).
+2. Створіть базу даних для проєкту.
+3. Налаштуйте доступ до бази даних, створивши користувача і пароль.
+
+### Redis
+
+1. Встановіть Redis на вашій локальній машині або скористайтеся хмарним сервісом, наприклад, [RedisLabs](https://redislabs.com/).
+2. Запустіть сервер Redis.
+
+### AWS (S3)
+
+Для інтеграції з AWS S3 вам потрібно створити новий бакет S3:
+
+1. Перейдіть в [AWS S3 Console](https://s3.console.aws.amazon.com/s3/home).
+2. Створіть новий бакет для збереження файлів.
+3. Налаштуйте облікові дані AWS (ключ доступу та секретний ключ) для доступу до S3.
+```
+
+## Інсталяція
+
+1. Клонуйте репозиторій:
 
 ```bash
+git clone https://github.com/Castor1983/auto-ria-clone-nestjs
+
+
+2. Встановіть залежності
 $ npm install
 ```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+## Налаштування оточення
 
 ```bash
-# unit tests
-$ npm run test
+файл Local.env у папці environments проєкту 
+ заповніть його необхідними змінними оточення або налаштуйте 
+ підключення баз данних дефолтними значеннями, які зазначені в ньому
 
-# e2e tests
-$ npm run test:e2e
+```
+## Компіляція та старт проєкту
 
-# test coverage
-$ npm run test:cov
+```bash
+## Запустіть скрипт у файлі package.json
+ "start:docker:db": "docker compose --env-file ./environments/local.env -f docker-compose.db.yaml up --build",
+## або виконайте команду в терміналі 
+ npm run start:docker:db
+ ##переконайтеся, що контейнери створені, виконавши команду
+ docker ps
+ ## створіть актуальну міграцію баз даних, запустивши скрипти по черзі у файлі package.json
+ "migration:generate": "cross-var npm run typeorm -- migration:generate ./src/database/migrations/$npm_config_name",
+ "migration:run": "npm run typeorm -- migration:run"
+ ## або виконайте команди по черзі в терміналі 
+npm run migration: generate
+npm run migration: run
+## скомпілюйте проєкт та запустіть сервер  запустивши скрипт у файлі package.json
+"start:local": "nest start --watch -e \"node --env-file ./environments/local.env\"",
+## або виконайте команду в терміналі 
+ npm run start:local
+ ## Сервер запуститься на  http://localhost:3001,
+ ## Swagger запуститься на  http://localhost:3001/docs,
+ 
 ```
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
