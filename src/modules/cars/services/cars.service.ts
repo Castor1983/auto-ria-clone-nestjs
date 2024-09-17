@@ -61,8 +61,11 @@ export class CarsService {
     return `This action returns all cars ${CarsListReqDto}`;
   }*/
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
+  public async findOne(carId: string): Promise<CarEntity> {
+    if (!isUUID(carId)) {
+      throw new BadRequestException('Car id must be uuid type');
+    }
+    return await this.carRepository.findOneBy({ id: carId });
   }
 
   private async createCar(

@@ -17,7 +17,9 @@ import {
 } from '@nestjs/swagger';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { SkipAuth } from '../auth/decorators/skip-auth.decorator';
 import { IUserData } from '../auth/interfaces/user-data.interface';
+import { StatisticViewService } from '../statisticView/statisticView.service';
 import { CreateCarReqDto } from './dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from './dto/req/update-car.req.dto';
 import { CarResDto } from './dto/res/car.res.dto';
@@ -29,7 +31,10 @@ import { CarsService } from './services/cars.service';
 @ApiTags('Cars')
 @Controller('cars')
 export class CarsController {
-  constructor(private readonly carsService: CarsService) {}
+  constructor(
+    private readonly carsService: CarsService,
+    private readonly statisticViewService: StatisticViewService,
+  ) {}
 
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -71,9 +76,10 @@ export class CarsController {
   public async findAll(@Query() query: CarsListReqDto) {
     return this.carsService.findAll(query);
   }*/
-
-  @Get(':id')
-  public async findOne(@Param('id') id: string) {
-    return this.carsService.findOne(+id);
+  @SkipAuth()
+  @Get(':carId')
+  public async findOne(@Param('carId') carId: string): Promise<CarResDto> {
+    await this.statisticViewService.addView(carId);
+    return await this.carsService.findOne(carId);
   }
 }

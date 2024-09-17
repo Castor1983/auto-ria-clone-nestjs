@@ -7,6 +7,7 @@ import { CarsModule } from './cars/cars.module';
 import { PostgresModule } from './postgres/postgres.module';
 import { RedisModule } from './redis/redis.module';
 import { RepositoryModule } from './repository/repository.module';
+import { StatisticViewModule } from './statisticView/statisticView.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
     RepositoryModule,
     RedisModule,
     AuthModule,
+    StatisticViewModule,
   ],
 })
 export class AppModule {}
